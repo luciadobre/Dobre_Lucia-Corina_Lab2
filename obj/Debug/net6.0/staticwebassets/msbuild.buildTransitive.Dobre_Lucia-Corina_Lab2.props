@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\Dobre_Lucia-Corina_Lab2.props" />
+</Project>
