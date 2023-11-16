@@ -19,5 +19,7 @@ namespace Dobre_Lucia_Corina_Lab2.Data
         public DbSet<Dobre_Lucia_Corina_Lab2.Models.Publisher>? Publisher { get; set; }
 
         public DbSet<Dobre_Lucia_Corina_Lab2.Models.Author>? Author { get; set; }
+
+        public DbSet<Dobre_Lucia_Corina_Lab2.Models.Category>? Category { get; set; }
     }
 }
