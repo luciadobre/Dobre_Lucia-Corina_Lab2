@@ -9,7 +9,6 @@ namespace Dobre_Lucia_Corina_Lab2.Models
         public int? MemberID { get; set; }
         public Member? Member { get; set; }
         public int? BookID { get; set; }
-        [ForeignKey("BookID")]
         public Book? Book { get; set; }
         [DataType(DataType.Date)]
         public DateTime ReturnDate { get; set; }

@@ -6,23 +6,27 @@ namespace Dobre_Lucia_Corina_Lab2.Models
     public class BookCategoriesPageModel : PageModel
     {
         public List<AssignedCategoryData> AssignedCategoryDataList;
-        public void PopulateAssignedCategoryData(Dobre_Lucia_Corina_Lab2Context context,
-        Book book)
+        public void PopulateAssignedCategoryData(Dobre_Lucia_Corina_Lab2Context context, Book book)
         {
             var allCategories = context.Category;
-            var bookCategories = new HashSet<int>(
-            book.BookCategories.Select(c => c.CategoryID)); //
             AssignedCategoryDataList = new List<AssignedCategoryData>();
-            foreach (var cat in allCategories)
+
+            if (book != null)
             {
-                AssignedCategoryDataList.Add(new AssignedCategoryData
+                var bookCategories = new HashSet<int>(book.BookCategories.Select(c => c.CategoryID));
+
+                foreach (var cat in allCategories)
                 {
-                    CategoryID = cat.ID,
-                    Name = cat.CategoryName,
-                    Assigned = bookCategories.Contains(cat.ID)
-                });
+                    AssignedCategoryDataList.Add(new AssignedCategoryData
+                    {
+                        CategoryID = cat.ID,
+                        Name = cat.CategoryName,
+                        Assigned = bookCategories.Contains(cat.ID)
+                    });
+                }
             }
         }
+
         public void UpdateBookCategories(Dobre_Lucia_Corina_Lab2Context context,
         string[] selectedCategories, Book bookToUpdate)
         {
