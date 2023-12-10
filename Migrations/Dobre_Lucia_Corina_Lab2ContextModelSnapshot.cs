@@ -54,6 +54,9 @@ namespace Dobre_Lucia_Corina_Lab2.Migrations
                     b.Property<int?>("AuthorID")
                         .HasColumnType("int");
 
+                    b.Property<int?>("BorrowingID")
+                        .HasColumnType("int");
+
                     b.Property<int?>("CategoryID")
                         .HasColumnType("int");
 
@@ -73,6 +76,8 @@ namespace Dobre_Lucia_Corina_Lab2.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("AuthorID");
+
+                    b.HasIndex("BorrowingID");
 
                     b.HasIndex("CategoryID");
 
@@ -104,6 +109,32 @@ namespace Dobre_Lucia_Corina_Lab2.Migrations
                     b.ToTable("BookCategory");
                 });
 
+            modelBuilder.Entity("Dobre_Lucia_Corina_Lab2.Models.Borrowing", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<int?>("BookID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MemberID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReturnDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("BookID");
+
+                    b.HasIndex("MemberID");
+
+                    b.ToTable("Borrowing");
+                });
+
             modelBuilder.Entity("Dobre_Lucia_Corina_Lab2.Models.Category", b =>
                 {
                     b.Property<int>("ID")
@@ -119,6 +150,35 @@ namespace Dobre_Lucia_Corina_Lab2.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("Dobre_Lucia_Corina_Lab2.Models.Member", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<string>("Adress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Member");
                 });
 
             modelBuilder.Entity("Dobre_Lucia_Corina_Lab2.Models.Publisher", b =>
@@ -144,6 +204,10 @@ namespace Dobre_Lucia_Corina_Lab2.Migrations
                         .WithMany("Books")
                         .HasForeignKey("AuthorID");
 
+                    b.HasOne("Dobre_Lucia_Corina_Lab2.Models.Borrowing", "Borrowing")
+                        .WithMany()
+                        .HasForeignKey("BorrowingID");
+
                     b.HasOne("Dobre_Lucia_Corina_Lab2.Models.Category", null)
                         .WithMany("Books")
                         .HasForeignKey("CategoryID");
@@ -153,6 +217,8 @@ namespace Dobre_Lucia_Corina_Lab2.Migrations
                         .HasForeignKey("PublisherID");
 
                     b.Navigation("Author");
+
+                    b.Navigation("Borrowing");
 
                     b.Navigation("Publisher");
                 });
@@ -176,6 +242,21 @@ namespace Dobre_Lucia_Corina_Lab2.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Dobre_Lucia_Corina_Lab2.Models.Borrowing", b =>
+                {
+                    b.HasOne("Dobre_Lucia_Corina_Lab2.Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookID");
+
+                    b.HasOne("Dobre_Lucia_Corina_Lab2.Models.Member", "Member")
+                        .WithMany("Borrowings")
+                        .HasForeignKey("MemberID");
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Member");
+                });
+
             modelBuilder.Entity("Dobre_Lucia_Corina_Lab2.Models.Author", b =>
                 {
                     b.Navigation("Books");
@@ -191,6 +272,11 @@ namespace Dobre_Lucia_Corina_Lab2.Migrations
                     b.Navigation("BookCategories");
 
                     b.Navigation("Books");
+                });
+
+            modelBuilder.Entity("Dobre_Lucia_Corina_Lab2.Models.Member", b =>
+                {
+                    b.Navigation("Borrowings");
                 });
 
             modelBuilder.Entity("Dobre_Lucia_Corina_Lab2.Models.Publisher", b =>
