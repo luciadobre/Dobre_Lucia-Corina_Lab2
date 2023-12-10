@@ -54,9 +54,6 @@ namespace Dobre_Lucia_Corina_Lab2.Migrations
                     b.Property<int?>("AuthorID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BorrowingID")
-                        .HasColumnType("int");
-
                     b.Property<int?>("CategoryID")
                         .HasColumnType("int");
 
@@ -71,13 +68,12 @@ namespace Dobre_Lucia_Corina_Lab2.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.HasKey("ID");
 
                     b.HasIndex("AuthorID");
-
-                    b.HasIndex("BorrowingID");
 
                     b.HasIndex("CategoryID");
 
@@ -128,7 +124,9 @@ namespace Dobre_Lucia_Corina_Lab2.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("BookID");
+                    b.HasIndex("BookID")
+                        .IsUnique()
+                        .HasFilter("[BookID] IS NOT NULL");
 
                     b.HasIndex("MemberID");
 
@@ -160,18 +158,21 @@ namespace Dobre_Lucia_Corina_Lab2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
-                    b.Property<string>("Adress")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Address")
+                        .HasMaxLength(70)
+                        .HasColumnType("nvarchar(70)");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
@@ -204,10 +205,6 @@ namespace Dobre_Lucia_Corina_Lab2.Migrations
                         .WithMany("Books")
                         .HasForeignKey("AuthorID");
 
-                    b.HasOne("Dobre_Lucia_Corina_Lab2.Models.Borrowing", "Borrowing")
-                        .WithMany()
-                        .HasForeignKey("BorrowingID");
-
                     b.HasOne("Dobre_Lucia_Corina_Lab2.Models.Category", null)
                         .WithMany("Books")
                         .HasForeignKey("CategoryID");
@@ -217,8 +214,6 @@ namespace Dobre_Lucia_Corina_Lab2.Migrations
                         .HasForeignKey("PublisherID");
 
                     b.Navigation("Author");
-
-                    b.Navigation("Borrowing");
 
                     b.Navigation("Publisher");
                 });
@@ -245,8 +240,8 @@ namespace Dobre_Lucia_Corina_Lab2.Migrations
             modelBuilder.Entity("Dobre_Lucia_Corina_Lab2.Models.Borrowing", b =>
                 {
                     b.HasOne("Dobre_Lucia_Corina_Lab2.Models.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookID");
+                        .WithOne("Borrowing")
+                        .HasForeignKey("Dobre_Lucia_Corina_Lab2.Models.Borrowing", "BookID");
 
                     b.HasOne("Dobre_Lucia_Corina_Lab2.Models.Member", "Member")
                         .WithMany("Borrowings")
@@ -265,6 +260,8 @@ namespace Dobre_Lucia_Corina_Lab2.Migrations
             modelBuilder.Entity("Dobre_Lucia_Corina_Lab2.Models.Book", b =>
                 {
                     b.Navigation("BookCategories");
+
+                    b.Navigation("Borrowing");
                 });
 
             modelBuilder.Entity("Dobre_Lucia_Corina_Lab2.Models.Category", b =>
